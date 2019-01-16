@@ -1,11 +1,12 @@
 package spell;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Scanner;
 
 public class SpellCorrector implements ISpellCorrector {
 
-    Trie dictionary;
+    private Trie dictionary;
 
     @Override
     public void useDictionary(String dictionaryFileName) throws IOException {
@@ -14,7 +15,9 @@ public class SpellCorrector implements ISpellCorrector {
         this.dictionary = new Trie();
 
         //  Read from dictionaryFileName
-        Scanner scin = new Scanner(dictionaryFileName);
+        Scanner scin = new Scanner(new File(dictionaryFileName));
+
+        scin.useDelimiter("[^A-Za-z]+");
 
         //  Add each word to dictionary
         while(scin.hasNext()){
@@ -28,6 +31,26 @@ public class SpellCorrector implements ISpellCorrector {
 
     @Override
     public String suggestSimilarWord(String inputWord) {
-        return null;
+        ITrie.INode x = this.dictionary.find(inputWord);
+        if (x == null){
+            return null;
+        } else {
+            return inputWord;
+        }
+    }
+
+    public int getWordCount(){
+        return this.dictionary.getWordCount();
+    }
+
+    public int getNodeCount(){
+        return this.dictionary.getNodeCount();
+    }
+
+    public static void main(String[] args) throws IOException {
+        SpellCorrector corrector = new SpellCorrector();
+        corrector.useDictionary(args[0]);
+        System.out.println(corrector.getWordCount() + " " + corrector.getNodeCount());
+
     }
 }
