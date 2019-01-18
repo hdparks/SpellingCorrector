@@ -47,10 +47,11 @@ public class SpellCorrector implements ISpellCorrector {
         return this.dictionary.getNodeCount();
     }
 
+    public String toString(){ return this.dictionary.toString(); }
+
     public static void main(String[] args) throws IOException {
         SpellCorrector corrector = new SpellCorrector();
         corrector.useDictionary(args[0]);
-        System.out.println(corrector.getWordCount() + " " + corrector.getNodeCount());
-
+        System.out.println(corrector.toString());
     }
 }

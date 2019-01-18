@@ -49,8 +49,7 @@ public class Trie implements spell.ITrie {
      */
     @Override
     public String toString() {
-
-        return null;
+        return this.root.toString();
     }
 
     @Override

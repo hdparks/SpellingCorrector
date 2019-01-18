@@ -12,6 +12,7 @@ public class TrieNode implements spell.ITrie.INode {
     private int value;
 
 
+
     // METHODS
 
     public int getValue() {
@@ -30,7 +31,7 @@ public class TrieNode implements spell.ITrie.INode {
         List<String> chopLetters = letters.subList( 1, letters.size() );
 
         // Find the next node
-        TrieNode nextNode = this.getNodeL(letters.get(0));
+        TrieNode nextNode = this.getNodeL(letters.get(0).charAt(0));
 
         // Pass the chopped list to the next node
         nextNode.add(chopLetters);
@@ -38,9 +39,9 @@ public class TrieNode implements spell.ITrie.INode {
         return;
     }
 
-    public TrieNode getNodeL(String l){
+    public TrieNode getNodeL(char l){
 
-        int index = "abcdefghijklmnopqrstuvwxyz".indexOf(l);
+        int index = l - 'a';
 
         if( this.nodeArray[index] == null ) this.nodeArray[index] = new TrieNode();
 
@@ -93,11 +94,35 @@ public class TrieNode implements spell.ITrie.INode {
 
         List<String> chopLetters = letters.subList(1,letters.size());
 
-        TrieNode nextNode = this.getNodeL(letters.get(0));
+        TrieNode nextNode = this.getNodeL(letters.get(0).charAt(0));
 
         return nextNode.find(chopLetters);
     }
 
 
+    public void buildToString(StringBuilder outString, StringBuilder current){
+        if ( this.value > 0 ){
+            outString.append(current + "\n");
+        }
 
+        for (int i = 0; i < 26; i++){
+            if (this.nodeArray[i] != null){
+                //  Here, we append the next letter to current
+                current.append( (char) (i + 'a') );
+
+                this.nodeArray[i].buildToString(outString,current);
+
+                // Before moving on, we take off the letter we just put on
+                current.delete(current.length() - 1, current.length());
+            }
+        }
+        return;
+    }
+
+    public String toString(){
+        StringBuilder outString = new StringBuilder();
+        StringBuilder current = new StringBuilder();
+        this.buildToString(outString, current);
+        return outString.toString();
+    }
 }
