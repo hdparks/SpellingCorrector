@@ -52,6 +52,6 @@ public class SpellCorrector implements ISpellCorrector {
     public static void main(String[] args) throws IOException {
         SpellCorrector corrector = new SpellCorrector();
         corrector.useDictionary(args[0]);
-        System.out.println(corrector.toString());
+        System.out.print(corrector.toString());
     }
 }

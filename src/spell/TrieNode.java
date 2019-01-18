@@ -19,11 +19,21 @@ public class TrieNode implements spell.ITrie.INode {
         return value;
     }
 
-    public void add(List<String> letters){
+    public void add(List<String> letters, Trie motherTrie){
 
         //  If we only get no letter, the word ends here.
         if ( letters.size() == 0 ){
+
+            if (this.value == 0){
+                //  First instance of this word
+                motherTrie.incWordCount();
+            }
+
+
             this.value += 1;
+
+
+
             return;
         }
 
@@ -31,46 +41,23 @@ public class TrieNode implements spell.ITrie.INode {
         List<String> chopLetters = letters.subList( 1, letters.size() );
 
         // Find the next node
-        TrieNode nextNode = this.getNodeL(letters.get(0).charAt(0));
+        TrieNode nextNode = this.getNodeL(letters.get(0).charAt(0), motherTrie);
 
         // Pass the chopped list to the next node
-        nextNode.add(chopLetters);
+        nextNode.add(chopLetters, motherTrie);
 
         return;
     }
 
-    public TrieNode getNodeL(char l){
+    public TrieNode getNodeL(char l, Trie motherTrie){
+        //  This method is only meant to be used in conjunction with the add method.
+        //  When searching the completed Trie, it is easier to index into nodeArray.
 
         int index = l - 'a';
 
-        if( this.nodeArray[index] == null ) this.nodeArray[index] = new TrieNode();
+        if( this.nodeArray[index] == null ) this.nodeArray[index] = new TrieNode(); motherTrie.incNodeCount();
 
         return this.nodeArray[index];
-    }
-
-    public int getNumberOfChildren(){
-
-        int count = 1;
-
-        for (TrieNode nodei : this.nodeArray){
-            if(nodei != null){
-                count += nodei.getNumberOfChildren();
-            }
-        }
-
-        return count;
-    }
-
-    public int getNumberOfWords(){
-
-        int count = this.getValue();
-
-        for (TrieNode nodei : this.nodeArray){
-            if(nodei != null){
-                count += nodei.getNumberOfWords();
-            }
-        }
-        return count;
     }
 
     public TrieNode find(List<String> letters){
@@ -94,7 +81,7 @@ public class TrieNode implements spell.ITrie.INode {
 
         List<String> chopLetters = letters.subList(1,letters.size());
 
-        TrieNode nextNode = this.getNodeL(letters.get(0).charAt(0));
+        TrieNode nextNode = this.nodeArray[letters.get(0).charAt(0)];
 
         return nextNode.find(chopLetters);
     }
@@ -116,7 +103,6 @@ public class TrieNode implements spell.ITrie.INode {
                 current.delete(current.length() - 1, current.length());
             }
         }
-        return;
     }
 
     public String toString(){
@@ -125,4 +111,34 @@ public class TrieNode implements spell.ITrie.INode {
         this.buildToString(outString, current);
         return outString.toString();
     }
+
+    @Override
+    public boolean equals(Object other){
+        if (this == other) return true;
+        if (other == null || getClass() != other.getClass()) return false;
+        TrieNode o = (TrieNode) other;
+
+        //  Check that values are equal
+        if ( this.getValue() != o.getValue()) return false;
+
+        //  Call equal on each child
+        for (int i = 0; i < 26; i++){
+            TrieNode child = this.nodeArray[i];
+            TrieNode oChild = o.nodeArray[i];
+
+            //  Both null, we go on
+            if (child == null && oChild == null ) continue;
+
+            //  One null, not a match
+            if (child == null || oChild == null ) return false;
+
+            //  call equals recursively on children
+            if (!child.equals(oChild)) return false;
+
+        }
+
+        // If no false on any child, the nodes are equal
+        return true;
+    }
+
 }

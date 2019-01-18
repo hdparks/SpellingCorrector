@@ -9,6 +9,10 @@ public class Trie implements spell.ITrie {
 
     //  VARIABLES
 
+    private int nodeCount = 0;
+
+    private int wordCount = 0;
+
     private TrieNode root = new TrieNode();
 
 
@@ -18,35 +22,30 @@ public class Trie implements spell.ITrie {
 
         word = word.toLowerCase();
 
-        List<String> letters = new ArrayList(Arrays.asList(word.split("")));
+        ArrayList letters = new ArrayList(Arrays.asList(word.split("")));
 
-        this.root.add(letters);
+        this.root.add(letters, this);
 
-        return;
     }
 
     public INode find(String word) {
 
         word = word.toLowerCase();
 
-        List<String> letters = new ArrayList(Arrays.asList(word.split("")));
+        ArrayList letters = new ArrayList(Arrays.asList(word.split("")));
 
         return root.find(letters);
     }
 
     public int getWordCount() {
-        return this.root.getNumberOfWords();
+        return this.wordCount;
     }
 
     public int getNodeCount() {
-        return this.root.getNumberOfChildren();
+        return this.nodeCount;
     }
 
-    /**
-     * The toString specification is as follows:
-     * For each word, in alphabetical order:
-     * <word>\n
-     */
+
     @Override
     public String toString() {
         return this.root.toString();
@@ -62,6 +61,18 @@ public class Trie implements spell.ITrie {
 
     @Override
     public int hashCode() {
-        return Objects.hash(root);
+        return this.getWordCount() * this.getNodeCount();
     }
+
+
+
+    public void incWordCount(){
+        this.wordCount += 1;
+    }
+
+    public void incNodeCount(){
+        this.nodeCount += 1;
+    }
+
+
 }
