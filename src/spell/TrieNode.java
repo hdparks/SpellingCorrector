@@ -65,7 +65,6 @@ public class TrieNode implements spell.ITrie.INode {
         //  If we run out of letters, we have it or we don't
         if ( letters.size() == 0 ){
 
-
             if (this.getValue() > 0){
 
                 return this;
@@ -81,7 +80,11 @@ public class TrieNode implements spell.ITrie.INode {
 
         List<String> chopLetters = letters.subList(1,letters.size());
 
-        TrieNode nextNode = this.nodeArray[letters.get(0).charAt(0)];
+        TrieNode nextNode = this.nodeArray[letters.get(0).charAt(0) - 'a'];
+
+        //  If there is no node, return null
+        if (nextNode == null) return null;
+
 
         return nextNode.find(chopLetters);
     }
