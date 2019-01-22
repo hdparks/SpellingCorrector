@@ -55,7 +55,10 @@ public class TrieNode implements spell.ITrie.INode {
 
         int index = l - 'a';
 
-        if( this.nodeArray[index] == null ) this.nodeArray[index] = new TrieNode(); motherTrie.incNodeCount();
+        if( this.nodeArray[index] == null ) {
+            this.nodeArray[index] = new TrieNode();
+            motherTrie.incNodeCount();
+        }
 
         return this.nodeArray[index];
     }

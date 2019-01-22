@@ -7,13 +7,12 @@ import java.util.Scanner;
 
 public class SpellCorrector implements ISpellCorrector {
 
-    private Trie dictionary;
+    private Trie dictionary = new Trie();
 
     @Override
     public void useDictionary(String dictionaryFileName) throws IOException {
 
         //  Implement new Trie dictionary
-        this.dictionary = new Trie();
 
         //  Read from dictionaryFileName
         Scanner scin = new Scanner(new File(dictionaryFileName));
@@ -123,25 +122,37 @@ public class SpellCorrector implements ISpellCorrector {
 
     public static void main(String[] args) throws IOException {
         SpellCorrector corrector = new SpellCorrector();
-        corrector.useDictionary(args[0]);
-        Scanner scin = new Scanner(System.in);
-        scin.useDelimiter("[^A-Za-z]+");
+        System.out.println("node count : "+corrector.getNodeCount()+" after no words");
+        System.out.println("word count : " +corrector.getWordCount()+ "after no words");
+        corrector.dictionary.add("a");
+        System.out.println("node count : "+corrector.getNodeCount()+" after 'a'");
+        System.out.println("word count : "+ corrector.getWordCount()+" after 'a'");
+        corrector.dictionary.add("apple");
+        System.out.println("node count : "+corrector.getNodeCount()+" after 'apple'");
+        System.out.println("word count : "+ corrector.getWordCount()+" after 'apple'");
+        corrector.dictionary.add("apple");
+        System.out.println("node count : "+corrector.getNodeCount()+" after 'apple' twice");
+        System.out.println("word count : "+ corrector.getWordCount()+" after 'apple' twice");
 
-        System.out.println("Please provide a word to correct: ");
-        String input = scin.next();
-        while(!input.equals("Q")){
-            String suggestion = corrector.suggestSimilarWord(input);
-            if(suggestion != null){
-                System.out.println("Suggestion: " + suggestion);
-            } else {
-                System.out.println("No similar word found");
-            }
 
-            System.out.println();
-            System.out.println("(To exit, enter \"Q\")");
-            System.out.println("Provide another word:");
-            input = scin.next();
-        }
+//        Scanner scin = new Scanner(System.in);
+//        scin.useDelimiter("[^A-Za-z]+");
+//
+//        System.out.println("Please provide a word to correct: ");
+//        String input = scin.next();
+//        while(!input.equals("Q")){
+//            String suggestion = corrector.suggestSimilarWord(input);
+//            if(suggestion != null){
+//                System.out.println("Suggestion: " + suggestion);
+//            } else {
+//                System.out.println("No similar word found");
+//            }
+//
+//            System.out.println();
+//            System.out.println("(To exit, enter \"Q\")");
+//            System.out.println("Provide another word:");
+//            input = scin.next();
+//        }
         return;
     }
 }
