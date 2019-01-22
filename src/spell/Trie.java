@@ -9,7 +9,8 @@ public class Trie implements spell.ITrie {
 
     //  VARIABLES
 
-    private int nodeCount = 0;
+    // Begins with root node, always
+    private int nodeCount = 1;
 
     private int wordCount = 0;
 
