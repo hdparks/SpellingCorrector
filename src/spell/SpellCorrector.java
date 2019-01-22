@@ -120,10 +120,31 @@ public class SpellCorrector implements ISpellCorrector {
 
     public String toString(){ return this.dictionary.toString(); }
 
+    @Override
+    public boolean equals(Object other){
+        if(this == other){
+            return true;
+        }
+        if (other == null || this.getClass() != other.getClass()) {
+            return false;
+        }
+        SpellCorrector o = (SpellCorrector) other;
+        return this.dictionary.equals(o.dictionary);
+
+    }
+
     public static void main(String[] args) throws IOException {
 
         SpellCorrector corrector = new SpellCorrector();
         corrector.useDictionary(args[0]);
+
+        SpellCorrector mimic = new SpellCorrector();
+        mimic.useDictionary(args[0]);
+
+        System.out.println("equality? "+ mimic.equals(corrector));
+
+        mimic.dictionary.add("zzzzz");
+        System.out.println("inequality? "+mimic.equals(corrector));
 
         Scanner scin = new Scanner(System.in);
         scin.useDelimiter("[^A-Za-z]+");

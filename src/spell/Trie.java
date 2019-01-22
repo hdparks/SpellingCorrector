@@ -54,10 +54,14 @@ public class Trie implements spell.ITrie {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o){
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()){
+            return false;
+        }
         Trie trie = (Trie) o;
-        return Objects.equals(root, trie.root);
+        return this.root.equals(trie.root);
     }
 
     @Override

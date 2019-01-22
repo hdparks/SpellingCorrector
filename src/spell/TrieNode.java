@@ -120,12 +120,19 @@ public class TrieNode implements spell.ITrie.INode {
 
     @Override
     public boolean equals(Object other){
-        if (this == other) return true;
-        if (other == null || getClass() != other.getClass()) return false;
+        if (this == other){
+            return true;
+        }
+        if (other == null || getClass() != other.getClass()){
+            return false;
+        }
+
         TrieNode o = (TrieNode) other;
 
         //  Check that values are equal
-        if ( this.getValue() != o.getValue()) return false;
+        if ( this.getValue() != o.getValue()) {
+            return false;
+        }
 
         //  Call equal on each child
         for (int i = 0; i < 26; i++){
@@ -133,13 +140,19 @@ public class TrieNode implements spell.ITrie.INode {
             TrieNode oChild = o.nodeArray[i];
 
             //  Both null, we go on
-            if (child == null && oChild == null ) continue;
+            if (child == null && oChild == null ){
+                continue;
+            }
 
             //  One null, not a match
-            if (child == null || oChild == null ) return false;
+            if (child == null || oChild == null ){
+                return false;
+            }
 
             //  call equals recursively on children
-            if (!child.equals(oChild)) return false;
+            if (!child.equals(oChild)){
+                return false;
+            }
 
         }
 
