@@ -23,17 +23,25 @@ public class Trie implements spell.ITrie {
 
         word = word.toLowerCase();
 
-        ArrayList letters = new ArrayList(Arrays.asList(word.split("")));
+        ArrayList<String> arrayLetters = new ArrayList<String>(Arrays.asList(word.split("")));
+
+        List<String> letters = (List<String>) arrayLetters;
 
         this.root.add(letters, this);
 
     }
 
     public INode find(String word) {
+        // Don't try empty strings
+        if (word == null || word.isEmpty()){
+          System.out.println("Almost tried an empty string!");
+          return null;
+        }
 
         word = word.toLowerCase();
 
-        ArrayList letters = new ArrayList(Arrays.asList(word.split("")));
+        ArrayList<String> letters = new ArrayList<String>(Arrays.asList(word.split("")));
+
 
         return root.find(letters);
     }

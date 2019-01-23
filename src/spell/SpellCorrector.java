@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Scanner;
+import java.util.List;
+import java.util.ArrayList;
 
 public class SpellCorrector implements ISpellCorrector {
 
@@ -34,6 +36,8 @@ public class SpellCorrector implements ISpellCorrector {
         inputWord = inputWord.toLowerCase();
         //  If the inputWord is found, return it
         if(dictionary.find(inputWord) != null) return inputWord;
+
+
         //  If the input word is not found, construct some new ones at 1 edit distance
         String[] oneEditDistance = SpellCorrector.getClosestWords(inputWord);
 
@@ -41,6 +45,9 @@ public class SpellCorrector implements ISpellCorrector {
         int winCount = 0;
 
         for (String current : oneEditDistance){
+            // Don't try empty strings
+            if(current.isEmpty()) continue;
+
             ITrie.INode cNode = dictionary.find(current);
             if (cNode == null) continue;
             if (cNode.getValue() > winCount){
@@ -55,7 +62,11 @@ public class SpellCorrector implements ISpellCorrector {
 
         //   If nothing was found at one edit distance, try two.
         for (String oneDist : oneEditDistance){
+          if(oneDist.isEmpty()) continue;
             for (String current : SpellCorrector.getClosestWords(oneDist)){
+
+                if (current.isEmpty()) continue;
+
                 ITrie.INode cNode = dictionary.find(current);
                 if (cNode == null) continue;
                 if (cNode.getValue() > winCount ||(cNode.getValue() == winCount && current.compareTo(winner) < 0)){
@@ -135,37 +146,12 @@ public class SpellCorrector implements ISpellCorrector {
 
     public static void main(String[] args) throws IOException {
 
-        SpellCorrector corrector = new SpellCorrector();
-        corrector.useDictionary(args[0]);
+      SpellCorrector c = new SpellCorrector();
+      c.useDictionary("words.txt");
+      SpellCorrector b = new SpellCorrector();
+      b.dictionary.add("yea");
 
-        SpellCorrector mimic = new SpellCorrector();
-        mimic.useDictionary(args[0]);
-
-        System.out.println("equality? "+ mimic.equals(corrector));
-
-        mimic.dictionary.add("zzzzz");
-        System.out.println("inequality? "+mimic.equals(corrector));
-
-        Scanner scin = new Scanner(System.in);
-        scin.useDelimiter("[^A-Za-z]+");
-
-        System.out.println("Please provide a word to correct: ");
-        String input = scin.next();
-        while(!input.equals("Q")){
-            String suggestion = corrector.suggestSimilarWord(input);
-            if(suggestion != null){
-                System.out.println("Suggestion: " + suggestion);
-            } else {
-                System.out.println("No similar word found");
-            }
-
-            System.out.println();
-            System.out.println("(To exit, enter \"Q\")");
-            System.out.println("Provide another word:");
-            input = scin.next();
-        }
-        System.out.println("word count: " +corrector.getWordCount()+
-                " node count : " +corrector.getNodeCount());
-        return;
+      System.out.println("suggestion: " + c.suggestSimilarWord("zzz"));
+      System.out.println("b suggestion : " + b.suggestSimilarWord("a"));
     }
 }
