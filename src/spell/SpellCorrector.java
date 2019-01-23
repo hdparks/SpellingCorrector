@@ -33,7 +33,12 @@ public class SpellCorrector implements ISpellCorrector {
 
     @Override
     public String suggestSimilarWord(String inputWord) {
-        inputWord = inputWord.toLowerCase();
+        inputWord = inputWord.replaceAll("[^A-Za-z]","").toLowerCase();
+
+        if (inputWord.isEmpty()){
+          return null;
+        }
+
         //  If the inputWord is found, return it
         if(dictionary.find(inputWord) != null) return inputWord;
 
@@ -145,13 +150,26 @@ public class SpellCorrector implements ISpellCorrector {
     }
 
     public static void main(String[] args) throws IOException {
-
       SpellCorrector c = new SpellCorrector();
       c.useDictionary("words.txt");
-      SpellCorrector b = new SpellCorrector();
-      b.dictionary.add("yea");
+      System.out.println("space: "+c.suggestSimilarWord(" "));
 
-      System.out.println("suggestion: " + c.suggestSimilarWord("zzz"));
-      System.out.println("b suggestion : " + b.suggestSimilarWord("a"));
+
+      String input = "";
+      Scanner scin = new Scanner(System.in);
+      System.out.println("Provide a word");
+      input = scin.next();
+      while(!input.equals("Q")){
+        String suggestion = c.suggestSimilarWord(input);
+        if(suggestion != null){
+          System.out.println("suggestion: "+ c.suggestSimilarWord(input));
+        } else {
+          System.out.println("no suggestion found.");
+        }
+
+        System.out.println();
+        input = scin.next();
+      }
+
     }
 }
